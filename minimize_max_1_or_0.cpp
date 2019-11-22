@@ -67,15 +67,11 @@ int main(){
     int low = 2;
     int mid;
     while(low<high){
-      // cout<<low<<" "<<high<<endl;
       mid = (low+high)/2;
       int tempk = 0;
       for(int i=0;i<=idx;i++){
-        // cout<<i<<" "<<shortened_string[i]<<endl;
-        // cout<<i<<" *** "<<flipsrequired(shortened_string[i],mid)<<endl;
         tempk += flipsrequired(shortened_string[i],mid);
       }
-      // cout<<mid<<" "<<tempk<<" "<<k<<endl;
       if(tempk<=k){
         high = mid;
       }
@@ -87,5 +83,5 @@ int main(){
     cout<<high<<endl;
 
   }
-
+  return 0;
 }
