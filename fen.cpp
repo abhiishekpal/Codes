@@ -82,17 +82,16 @@ void mergeSort(int l,int r)
 int dfs(int start, int prev_idx, int curr_idx, int dir, int n){
 
 
-	if(curr_idx==start && dir!=-1){
+	if(curr_idx==start && dir!=-1)
 		return 1;
-	}
+
 
 	if(dir==-1){
 		if(fence[curr_idx].dir[0]!=-1 && fence[fence[curr_idx].dir[0]].dir[2]!=-1){
 			fence[curr_idx].dir[0] = -1;
 			int val = dfs(start, curr_idx, fence[curr_idx].dir[0], 2, n);
-			if(val==1){
+			if(val==1)
 				return 1;
-			}
 		}
 		else
 			return 0;
@@ -102,23 +101,20 @@ int dfs(int start, int prev_idx, int curr_idx, int dir, int n){
 		if(fence[curr_idx][(dir+1)%4]!=-1 && fence[fence[curr_idx].dir[(dir+1)%4]].dir[((dir+1)%4+2)%4]!=-1){
 			fence[curr_idx].dir[(dir+1)%4]=-1;
 			int val = dfs(start, curr_idx, fence[curr_idx][(dir+1)%4], ((dir+1)%4+2)%4, n);
-			if(val==1){
+			if(val==1)
 				return 1;
-			}
 		}
 		if(fence[curr_idx][(dir+3)%4]!=-1 && fence[fence[curr_idx].dir[(dir+3)%4]].dir[((dir+3)%4+2)%4]!=-1){
 			fence[curr_idx].dir[(dir+3)%4]=-1;
 			int val = dfs(start, curr_idx, fence[curr_idx][(dir+3)%4], ((dir+3)%4+2)%4, n);
-			if(val==1){
+			if(val==1)
 				return 1;
-			}
 		}
 		if(fence[idx][(dir+4)%4]!=-1 && fence[fence[curr_idx].dir[(dir+4)%4]].dir[((dir+4)%4+2)%4]!=-1){
 			fence[idx].dir[(dir+4)%4]=-1;
 			int val = dfs(start, curr_idx, fence[idx][(dir+4)%4], ((dir+4)%4+2)%4, n);
-			if(val==1){
+			if(val==1)
 				return 1;
-			}
 		}
 		
 	}
@@ -172,24 +168,9 @@ int main(){
 
 
 		for(int i=0;i<n;i++){
-			if(visited[i]==0){
-
-				int val = dfs(i, -1, i, -1, n);
-
-			}
+			int val = dfs(i, -1, i, -1, n);
 		}
 
-
-		
-
-
-
-
 	}
-
-
-
-
-
 	return 0;
 }
