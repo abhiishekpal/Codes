@@ -124,10 +124,9 @@ int dfs(int start, int prev_idx, int curr_idx, int dir, int n){
 
 	if(fence[prev_idx].direc[(dir+2)%4]<0)
 		return 0;
-	
 
 	if(dir!=-1)
-	fence[prev_idx].direc[(dir+2)%4] = -1;
+		fence[prev_idx].direc[(dir+2)%4] = -1;
 
 
 	if(curr_idx==start && dir!=-1)
@@ -135,62 +134,27 @@ int dfs(int start, int prev_idx, int curr_idx, int dir, int n){
 
 
 	if(dir==-1){
-		int val = dfs(start, curr_idx, fence[curr_idx].direc[0], 2, n);
-		if(val==1){
-			// update(curr_idx, dir, 0);
-			if(!(fence[curr_idx].direc[(0)%4]==-1 && fence[fence2[curr_idx].direc[(0)%4]].direc[((0)%4+2)%4]==-1)){
-				fence[curr_idx].direc[dir%4] = -2;
-				fence[fence2[curr_idx].direc[dir%4]].direc[(dir+2)%4] = -2;
-				ans++;
-			}
+		if(dfs(start, curr_idx, fence[curr_idx].direc[0], 2, n)){
+			update(curr_idx, 0, 0);
 			return 1;
 		}
 		
 	}
 	else{
-		int val;
-		val = dfs(start, curr_idx, fence[curr_idx].direc[(dir+3)%4], ((dir+3)%4+2)%4, n);
-		if(val==1){
-			update(curr_idx, dir, 3);
-			// if(!(fence[curr_idx].direc[(dir+3)%4]==-1 && fence[fence2[curr_idx].direc[(dir+3)%4]].direc[((dir+3)%4+2)%4]==-1)){
-			// 	fence[curr_idx].direc[(dir+3)%4] = -2;
-			// 	fence[fence2[curr_idx].direc[(dir+3)%4]].direc[((dir+3)%4+2)%4] = -2;
-			// 	ans++;
-			// }
-			
+		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir+3)%4], ((dir+3)%4+2)%4, n)){
+			update(curr_idx, dir, 3);	
 			return 1;
 		}
-		val = dfs(start, curr_idx, fence[curr_idx].direc[(dir+2)%4], ((dir+2)%4+2)%4, n);
-		if(val==1){
+		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir+2)%4], ((dir+2)%4+2)%4, n)){
 			update(curr_idx, dir, 2);
-			// if(!(fence[curr_idx].direc[(dir+2)%4]==-1 && fence[fence2[curr_idx].direc[(dir+2)%4]].direc[((dir+2)%4+2)%4]==-1)){
-			// 	fence[curr_idx].direc[(dir+2)%4] = -2;
-			// 	fence[fence2[curr_idx].direc[(dir+2)%4]].direc[((dir+2)%4+2)%4] = -2;
-			// 	ans++;
-			// }
-			
 			return 1;
 		}
-		val = dfs(start, curr_idx, fence[curr_idx].direc[(dir+1)%4], ((dir+1)%4+2)%4, n);
-		if(val==1){
+		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir+1)%4], ((dir+1)%4+2)%4, n)){
 			update(curr_idx, dir, 1);
-			// if(!(fence[curr_idx].direc[(dir+1)%4]==-1 && fence[fence2[curr_idx].direc[(dir+1)%4]].direc[((dir+1)%4+2)%4]==-1)){
-			// 	fence[curr_idx].direc[(dir+1)%4] = -2;
-			// 	fence[fence2[curr_idx].direc[(dir+1)%4]].direc[((dir+1)%4+2)%4] = -2;
-			// 	ans++;
-			// }
-			
 			return 1;
 		}
-		val = dfs(start, curr_idx, fence[curr_idx].direc[(dir)%4], ((dir)%4+2)%4, n);
-		if(val==1){
+		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir)%4], ((dir)%4+2)%4, n)){
 			update(curr_idx, dir, 0);
-			// if(!(fence[curr_idx].direc[(dir)%4]==-1 &&  fence[fence2[curr_idx].direc[(dir)%4]].direc[((dir)%4+2)%4]==-1)){
-			// 	fence[curr_idx].direc[dir%4] = -2;
-			// 	fence[fence2[curr_idx].direc[dir%4]].direc[(dir+2)%4] = -2;
-			// 	ans++;
-			// }
-			
 			return 1;
 		}
 	}
