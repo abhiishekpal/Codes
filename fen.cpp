@@ -119,7 +119,7 @@ void update(int curr_idx, int dir, int idx){
 		ans++;
 	}
 }
-int dfs(int start, int prev_idx, int curr_idx, int dir, int n){
+int dfs(int start, int prev_idx, int curr_idx, int dir){
  
 
 	if(fence[prev_idx].direc[(dir+2)%4]<0)
@@ -134,26 +134,26 @@ int dfs(int start, int prev_idx, int curr_idx, int dir, int n){
 
 
 	if(dir==-1){
-		if(dfs(start, curr_idx, fence[curr_idx].direc[0], 2, n)){
+		if(dfs(start, curr_idx, fence[curr_idx].direc[0], 2)){
 			update(curr_idx, 0, 0);
 			return 1;
 		}
 		
 	}
 	else{
-		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir+3)%4], ((dir+3)%4+2)%4, n)){
+		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir+3)%4], ((dir+3)%4+2)%4)){
 			update(curr_idx, dir, 3);	
 			return 1;
 		}
-		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir+2)%4], ((dir+2)%4+2)%4, n)){
+		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir+2)%4], ((dir+2)%4+2)%4)){
 			update(curr_idx, dir, 2);
 			return 1;
 		}
-		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir+1)%4], ((dir+1)%4+2)%4, n)){
+		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir+1)%4], ((dir+1)%4+2)%4)){
 			update(curr_idx, dir, 1);
 			return 1;
 		}
-		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir)%4], ((dir)%4+2)%4, n)){
+		if(dfs(start, curr_idx, fence[curr_idx].direc[(dir)%4], ((dir)%4+2)%4)){
 			update(curr_idx, dir, 0);
 			return 1;
 		}
@@ -225,7 +225,7 @@ int main(){
 		ans = 0;
 
 		for(int i=0;i<n;i++){
-			int val = dfs(arr[i], -1, arr[i], -1, n);
+			int val = dfs(arr[i], -1, arr[i], -1);
 			fence[arr[i]].direc[0]=-2;
 			fence[fence2[arr[i]].direc[0]].direc[2]=-2;
 		}
