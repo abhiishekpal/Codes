@@ -52,10 +52,10 @@ struct direction{
 
 cord expec[100001];
 cord poles[100001];
-direction fence[100001];
+direction fence[100001], fence2[100001];
 int arr[100001];
 
-
+int ans = 0;
 void merge(int l,int m,int r) 
 { 
     int i, j, k; 
@@ -112,56 +112,89 @@ void mergeSort(int l,int r)
         merge(l, m, r); 
     } 
 } 
-
-void dfs(int start, int prev_idx, int curr_idx, int dir, int n){
+void update(int curr_idx, int dir, int idx){
+	if(!(fence[curr_idx].direc[(dir+idx)%4]==-1 && fence[fence2[curr_idx].direc[(dir+idx)%4]].direc[((dir+idx)%4+2)%4]==-1)){
+		fence[curr_idx].direc[(dir+idx)%4] = -2;
+		fence[fence2[curr_idx].direc[(dir+idx)%4]].direc[((dir+idx)+2)%4] = -2;
+		ans++;
+	}
+}
+int dfs(int start, int prev_idx, int curr_idx, int dir, int n){
  
 
 	if(fence[prev_idx].direc[(dir+2)%4]<0)
-		return;
-	cout<<start<<" "<<curr_idx<<" "<<poles[curr_idx].x<<" "<<poles[curr_idx].y<<" "<<dir<<endl;
+		return 0;
+	
 
 	if(dir!=-1)
 	fence[prev_idx].direc[(dir+2)%4] = -1;
 
+
 	if(curr_idx==start && dir!=-1)
-		return;
+		return 1;
 
 
 	if(dir==-1){
-		dfs(start, curr_idx, fence[curr_idx].direc[0], 2, n);
-		// if(fence[curr_idx].direc[0]==-1 && fence[fence[curr_idx].direc[0]].direc[2]!=-1){
-		// 	fence[curr_idx].direc[0] = -2;
-		// 	fence[fence[curr_idx].direc[0]].direc[2] = -2;
-
-		// }
+		int val = dfs(start, curr_idx, fence[curr_idx].direc[0], 2, n);
+		if(val==1){
+			// update(curr_idx, dir, 0);
+			if(!(fence[curr_idx].direc[(0)%4]==-1 && fence[fence2[curr_idx].direc[(0)%4]].direc[((0)%4+2)%4]==-1)){
+				fence[curr_idx].direc[dir%4] = -2;
+				fence[fence2[curr_idx].direc[dir%4]].direc[(dir+2)%4] = -2;
+				ans++;
+			}
+			return 1;
+		}
+		
 	}
 	else{
-		dfs(start, curr_idx, fence[curr_idx].direc[(dir+3)%4], ((dir+3)%4+2)%4, n);
-		// if(fence[curr_idx].direc[(dir+3)%4]==-1 && fence[fence[curr_idx].direc[(dir+3)%4]].direc[((dir+3)%4+2)%4]!=-1){
-		// 	fence[curr_idx].direc[(dir+3)%4] = -2;
-		// 	fence[fence[curr_idx].direc[(dir+3)%4]].direc[((dir+3)%4+2)%4] = -2;
-
-		// }
-		dfs(start, curr_idx, fence[curr_idx].direc[(dir+2)%4], ((dir+2)%4+2)%4, n);
-		// if(fence[curr_idx].direc[(dir+2)%4]==-1 && fence[fence[curr_idx].direc[(dir+2)%4]].direc[((dir+2)%4+2)%4]!=-1){
-		// 	fence[curr_idx].direc[(dir+2)%4] = -2;
-		// 	fence[fence[curr_idx].direc[(dir+2)%4]].direc[((dir+2)%4+2)%4] = -2;
-
-		// }
-		dfs(start, curr_idx, fence[curr_idx].direc[(dir+1)%4], ((dir+1)%4+2)%4, n);
-		// if(fence[curr_idx].direc[(dir+1)%4]==-1 && fence[fence[curr_idx].direc[(dir+1)%4]].direc[((dir+1)%4+2)%4]!=-1){
-		// 	fence[curr_idx].direc[(dir+1)%4] = -2;
-		// 	fence[fence[curr_idx].direc[(dir+1)%4]].direc[((dir+1)%4+2)%4] = -2;
-
-		// }
-		dfs(start, curr_idx, fence[curr_idx].direc[(dir)%4], ((dir)%4+2)%4, n);
-		// if(fence[curr_idx].direc[(dir)%4]==-1 && fence[fence[curr_idx].direc[(dir)%4]].direc[((dir)%4+2)%4]!=-1){
-		// 	fence[curr_idx].direc[(dir)%4] = -2;
-		// 	fence[fence[curr_idx].direc[(dir)%4]].direc[((dir)%4+2)%4] = -2;
-
-		// }
+		int val;
+		val = dfs(start, curr_idx, fence[curr_idx].direc[(dir+3)%4], ((dir+3)%4+2)%4, n);
+		if(val==1){
+			update(curr_idx, dir, 3);
+			// if(!(fence[curr_idx].direc[(dir+3)%4]==-1 && fence[fence2[curr_idx].direc[(dir+3)%4]].direc[((dir+3)%4+2)%4]==-1)){
+			// 	fence[curr_idx].direc[(dir+3)%4] = -2;
+			// 	fence[fence2[curr_idx].direc[(dir+3)%4]].direc[((dir+3)%4+2)%4] = -2;
+			// 	ans++;
+			// }
+			
+			return 1;
+		}
+		val = dfs(start, curr_idx, fence[curr_idx].direc[(dir+2)%4], ((dir+2)%4+2)%4, n);
+		if(val==1){
+			update(curr_idx, dir, 2);
+			// if(!(fence[curr_idx].direc[(dir+2)%4]==-1 && fence[fence2[curr_idx].direc[(dir+2)%4]].direc[((dir+2)%4+2)%4]==-1)){
+			// 	fence[curr_idx].direc[(dir+2)%4] = -2;
+			// 	fence[fence2[curr_idx].direc[(dir+2)%4]].direc[((dir+2)%4+2)%4] = -2;
+			// 	ans++;
+			// }
+			
+			return 1;
+		}
+		val = dfs(start, curr_idx, fence[curr_idx].direc[(dir+1)%4], ((dir+1)%4+2)%4, n);
+		if(val==1){
+			update(curr_idx, dir, 1);
+			// if(!(fence[curr_idx].direc[(dir+1)%4]==-1 && fence[fence2[curr_idx].direc[(dir+1)%4]].direc[((dir+1)%4+2)%4]==-1)){
+			// 	fence[curr_idx].direc[(dir+1)%4] = -2;
+			// 	fence[fence2[curr_idx].direc[(dir+1)%4]].direc[((dir+1)%4+2)%4] = -2;
+			// 	ans++;
+			// }
+			
+			return 1;
+		}
+		val = dfs(start, curr_idx, fence[curr_idx].direc[(dir)%4], ((dir)%4+2)%4, n);
+		if(val==1){
+			update(curr_idx, dir, 0);
+			// if(!(fence[curr_idx].direc[(dir)%4]==-1 &&  fence[fence2[curr_idx].direc[(dir)%4]].direc[((dir)%4+2)%4]==-1)){
+			// 	fence[curr_idx].direc[dir%4] = -2;
+			// 	fence[fence2[curr_idx].direc[dir%4]].direc[(dir+2)%4] = -2;
+			// 	ans++;
+			// }
+			
+			return 1;
+		}
 	}
-	return;
+	return 0;
 
 }
 
@@ -171,6 +204,7 @@ int main(){
 	ios::sync_with_stdio(false);
 
 	int T;cin>>T;
+	int tc=1;
 	while(T--){
 		
 		int n;cin>>n;
@@ -201,38 +235,39 @@ int main(){
 			if(x1>x2){
 				fence[a].direc[1] = b;
 				fence[b].direc[3] = a;
+				fence2[a].direc[1] = b;
+				fence2[b].direc[3] = a;
 			}
 			else if(x1<x2){
 				fence[a].direc[3] = b;
 				fence[b].direc[1] = a;
+				fence2[a].direc[3] = b;
+				fence2[b].direc[1] = a;
 			}
 			else if(y1>y2){
 				fence[a].direc[2] = b;
 				fence[b].direc[0] = a;
+				fence2[a].direc[2] = b;
+				fence2[b].direc[0] = a;
 			}
 			else if(y1<y2){
 				fence[a].direc[0] = b;
 				fence[b].direc[2] = a;
+				fence2[a].direc[0] = b;
+				fence2[b].direc[2] = a;
 			}
 		}
 		mergeSort(0, n-1);
+		ans = 0;
+
+		for(int i=0;i<n;i++){
+			int val = dfs(arr[i], -1, arr[i], -1, n);
+			fence[arr[i]].direc[0]=-2;
+			fence[fence2[arr[i]].direc[0]].direc[2]=-2;
+		}
 		
-
-		for(int i=0;i<n;i++){
-			cout<<"***\n";
-			dfs(arr[i], -1, arr[i], -1, n);
-
-		}
-		int ct = 0;
-		for(int i=0;i<n;i++){
-			for(int j=0;j<4;j++){
-				if(fence[arr[i]].direc[j]!=-2){
-					ct++;
-				}
-			}
-		}
-		cout<<ct/2<<endl;
-		cout<<"done\n";
+		cout<<"#"<<tc<<" "<<m-ans<<endl;
+		tc++;
 
 	}
 	return 0;
