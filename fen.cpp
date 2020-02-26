@@ -1,6 +1,39 @@
 /*input
-
-
+1
+15
+1 1
+1 8
+2 3
+2 5
+4 2
+4 3
+4 5
+4 6
+4 8
+6 3
+6 5
+7 2
+7 6
+8 1
+8 8 
+17
+1 2
+1 14
+2 9
+3 4 
+3 6
+4 7
+5 6
+5 12
+6 10
+7 11
+7 8
+8 9
+8 13
+9 15
+10 11
+12 13
+14 15
 
 
 
@@ -13,12 +46,13 @@ using namespace std;
 struct cord{
 	int x,y;
 };
-struct dir{
-	int dir[4];
+struct direction{
+	int direc[4];
 };
 
+cord expec[100001];
 cord poles[100001];
-dir fence[100001];
+direction fence[100001];
 int arr[100001];
 
 
@@ -36,20 +70,20 @@ void merge(int l,int m,int r)
     j = 0; 
     k = l; 
     while (i < n1 && j < n2){ 
-        if(cord[L[i]].x < cord[R[j]].x){ 
+        if(poles[L[i]].x < poles[R[j]].x){ 
             arr[k] = L[i]; 
             i++; 
         } 
-        else if(cord[L[i]].x > cord[R[j]].x){ 
+        else if(poles[L[i]].x > poles[R[j]].x){ 
             arr[k] = R[j]; 
             j++; 
         } 
-        else if(cord[L[i]].x == cord[R[j]].x){ 
-            if(cord[L[i]].y < cord[R[j]].y){ 
+        else if(poles[L[i]].x == poles[R[j]].x){ 
+            if(poles[L[i]].y < poles[R[j]].y){ 
 	            arr[k] = L[i]; 
 	            i++; 
 	        } 
-	        else if(cord[L[i]].y > cord[R[j]].y){ 
+	        else if(poles[L[i]].y > poles[R[j]].y){ 
 	            arr[k] = R[j]; 
 	            j++; 
         	}
@@ -79,48 +113,58 @@ void mergeSort(int l,int r)
     } 
 } 
 
-int dfs(int start, int prev_idx, int curr_idx, int dir, int n){
+void dfs(int start, int prev_idx, int curr_idx, int dir, int n){
+ 
 
+	if(fence[prev_idx].direc[(dir+2)%4]<0)
+		return;
+	cout<<start<<" "<<curr_idx<<" "<<poles[curr_idx].x<<" "<<poles[curr_idx].y<<" "<<dir<<endl;
+
+	if(dir!=-1)
+	fence[prev_idx].direc[(dir+2)%4] = -1;
 
 	if(curr_idx==start && dir!=-1)
-		return 1;
+		return;
 
 
 	if(dir==-1){
-		if(fence[curr_idx].dir[0]!=-1 && fence[fence[curr_idx].dir[0]].dir[2]!=-1){
-			fence[curr_idx].dir[0] = -1;
-			int val = dfs(start, curr_idx, fence[curr_idx].dir[0], 2, n);
-			if(val==1)
-				return 1;
-		}
-		else
-			return 0;
+		dfs(start, curr_idx, fence[curr_idx].direc[0], 2, n);
+		// if(fence[curr_idx].direc[0]==-1 && fence[fence[curr_idx].direc[0]].direc[2]!=-1){
+		// 	fence[curr_idx].direc[0] = -2;
+		// 	fence[fence[curr_idx].direc[0]].direc[2] = -2;
 
+		// }
 	}
 	else{
-		if(fence[curr_idx][(dir+1)%4]!=-1 && fence[fence[curr_idx].dir[(dir+1)%4]].dir[((dir+1)%4+2)%4]!=-1){
-			fence[curr_idx].dir[(dir+1)%4]=-1;
-			int val = dfs(start, curr_idx, fence[curr_idx][(dir+1)%4], ((dir+1)%4+2)%4, n);
-			if(val==1)
-				return 1;
-		}
-		if(fence[curr_idx][(dir+3)%4]!=-1 && fence[fence[curr_idx].dir[(dir+3)%4]].dir[((dir+3)%4+2)%4]!=-1){
-			fence[curr_idx].dir[(dir+3)%4]=-1;
-			int val = dfs(start, curr_idx, fence[curr_idx][(dir+3)%4], ((dir+3)%4+2)%4, n);
-			if(val==1)
-				return 1;
-		}
-		if(fence[idx][(dir+4)%4]!=-1 && fence[fence[curr_idx].dir[(dir+4)%4]].dir[((dir+4)%4+2)%4]!=-1){
-			fence[idx].dir[(dir+4)%4]=-1;
-			int val = dfs(start, curr_idx, fence[idx][(dir+4)%4], ((dir+4)%4+2)%4, n);
-			if(val==1)
-				return 1;
-		}
-		
+		dfs(start, curr_idx, fence[curr_idx].direc[(dir+3)%4], ((dir+3)%4+2)%4, n);
+		// if(fence[curr_idx].direc[(dir+3)%4]==-1 && fence[fence[curr_idx].direc[(dir+3)%4]].direc[((dir+3)%4+2)%4]!=-1){
+		// 	fence[curr_idx].direc[(dir+3)%4] = -2;
+		// 	fence[fence[curr_idx].direc[(dir+3)%4]].direc[((dir+3)%4+2)%4] = -2;
+
+		// }
+		dfs(start, curr_idx, fence[curr_idx].direc[(dir+2)%4], ((dir+2)%4+2)%4, n);
+		// if(fence[curr_idx].direc[(dir+2)%4]==-1 && fence[fence[curr_idx].direc[(dir+2)%4]].direc[((dir+2)%4+2)%4]!=-1){
+		// 	fence[curr_idx].direc[(dir+2)%4] = -2;
+		// 	fence[fence[curr_idx].direc[(dir+2)%4]].direc[((dir+2)%4+2)%4] = -2;
+
+		// }
+		dfs(start, curr_idx, fence[curr_idx].direc[(dir+1)%4], ((dir+1)%4+2)%4, n);
+		// if(fence[curr_idx].direc[(dir+1)%4]==-1 && fence[fence[curr_idx].direc[(dir+1)%4]].direc[((dir+1)%4+2)%4]!=-1){
+		// 	fence[curr_idx].direc[(dir+1)%4] = -2;
+		// 	fence[fence[curr_idx].direc[(dir+1)%4]].direc[((dir+1)%4+2)%4] = -2;
+
+		// }
+		dfs(start, curr_idx, fence[curr_idx].direc[(dir)%4], ((dir)%4+2)%4, n);
+		// if(fence[curr_idx].direc[(dir)%4]==-1 && fence[fence[curr_idx].direc[(dir)%4]].direc[((dir)%4+2)%4]!=-1){
+		// 	fence[curr_idx].direc[(dir)%4] = -2;
+		// 	fence[fence[curr_idx].direc[(dir)%4]].direc[((dir)%4+2)%4] = -2;
+
+		// }
 	}
-	return 0;
+	return;
 
 }
+
 
 int main(){
 
@@ -132,44 +176,63 @@ int main(){
 		int n;cin>>n;
 		for(int i=0;i<n;i++){
 			int x,y;cin>>x>>y;
-			cord[i+1].x = x;
-			cord[i+1].y = y;
+			poles[i+1].x = x;
+			poles[i+1].y = y;
 			arr[i] = i+1;
 		}
 		int m;cin>>m;
 		for(int i=0;i<m;i++){
 			int a,b;cin>>a>>b;
-			int x1 = cord[a].x;
-			int y1 = cord[a].y;
-			int x2 = cord[b].x;
-			int y2 = cord[b].y;
+			expec[i].x = a;
+			expec[i].y = b;
 			for(int j=0;j<4;j++){
-				fence[a].dir[j]=-1;
-				fence[b].dir[j]=-1;
+				fence[a].direc[j]=-2;
+				fence[b].direc[j]=-2;
 			}
+		}
+		for(int i=0;i<m;i++){
+			int a = expec[i].x;
+			int b = expec[i].y;                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+			int x1 = poles[a].x;
+			int y1 = poles[a].y;
+			int x2 = poles[b].x;
+			int y2 = poles[b].y;
+			
 			if(x1>x2){
-				fence[a].dir[1] = b;
-				fence[b].dir[3] = a;
+				fence[a].direc[1] = b;
+				fence[b].direc[3] = a;
 			}
 			else if(x1<x2){
-				fence.dir[a][3] = b;
-				fence.dir[b][1] = a;
+				fence[a].direc[3] = b;
+				fence[b].direc[1] = a;
 			}
 			else if(y1>y2){
-				fence[a].dir[2] = b;
-				fence[b].dir[0] = a;
+				fence[a].direc[2] = b;
+				fence[b].direc[0] = a;
 			}
 			else if(y1<y2){
-				fence[a].dir[0] = b;
-				fence[b].dir[2] = a;
+				fence[a].direc[0] = b;
+				fence[b].direc[2] = a;
 			}
 		}
 		mergeSort(0, n-1);
-
+		
 
 		for(int i=0;i<n;i++){
-			int val = dfs(i, -1, i, -1, n);
+			cout<<"***\n";
+			dfs(arr[i], -1, arr[i], -1, n);
+
 		}
+		int ct = 0;
+		for(int i=0;i<n;i++){
+			for(int j=0;j<4;j++){
+				if(fence[arr[i]].direc[j]!=-2){
+					ct++;
+				}
+			}
+		}
+		cout<<ct/2<<endl;
+		cout<<"done\n";
 
 	}
 	return 0;
