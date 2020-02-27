@@ -1,6 +1,6 @@
 /*input
 1
-15
+19
 1 1
 1 8
 2 3
@@ -16,7 +16,11 @@
 7 6
 8 1
 8 8 
-17
+1 9
+1 10
+4 10
+4 9
+23
 1 2
 1 14
 2 9
@@ -34,6 +38,13 @@
 10 11
 12 13
 14 15
+2 16
+16 17
+17 18
+18 19
+19 16
+9 19
+
 
 
 
@@ -88,9 +99,10 @@ void merge(int l,int m,int r)
 	            j++; 
         	}
         } 
-       
+       	
         k++; 
     }
+
     while (i < n1){ 
         arr[k] = L[i]; 
         i++; 
@@ -105,6 +117,7 @@ void merge(int l,int m,int r)
   
 void mergeSort(int l,int r) 
 { 
+	
     if (l < r){ 
         int m = l+(r-l)/2; 
         mergeSort(l, m); 
@@ -114,6 +127,7 @@ void mergeSort(int l,int r)
 } 
 void update(int curr_idx, int dir, int idx){
 	if(!(fence[curr_idx].direc[(dir+idx)%4]==-1 && fence[fence2[curr_idx].direc[(dir+idx)%4]].direc[((dir+idx)%4+2)%4]==-1)){
+		// cout<<curr_idx<<" ** "<<fence2[curr_idx].direc[(dir+idx)%4]<<endl;
 		fence[curr_idx].direc[(dir+idx)%4] = -2;
 		fence[fence2[curr_idx].direc[(dir+idx)%4]].direc[((dir+idx)+2)%4] = -2;
 		ans++;
@@ -127,7 +141,7 @@ int dfs(int start, int prev_idx, int curr_idx, int dir){
 
 	if(dir!=-1)
 		fence[prev_idx].direc[(dir+2)%4] = -1;
-
+	
 
 	if(curr_idx==start && dir!=-1)
 		return 1;
@@ -221,14 +235,14 @@ int main(){
 				fence2[b].direc[2] = a;
 			}
 		}
+		
 		mergeSort(0, n-1);
 		ans = 0;
 
 		for(int i=0;i<n;i++){
 			int val = dfs(arr[i], -1, arr[i], -1);
-			fence[arr[i]].direc[0]=-2;
-			fence[fence2[arr[i]].direc[0]].direc[2]=-2;
 		}
+		
 		
 		cout<<"#"<<tc<<" "<<m-ans<<endl;
 		tc++;
